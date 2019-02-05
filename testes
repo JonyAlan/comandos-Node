@@ -1,0 +1,115 @@
+
+<3>
+contando linhas de um arquivo
+
+fs = require('fs')
+
+var texto = fs.readFileSync (process.argv[2]);
+
+var str = texto.toString()
+
+var n = str.split('\n').length;
+
+console.log(n -1);
+
+<4>
+contando linha e tratando erros, modo assincrono.
+fs = require('fs')
+
+fs.readFile(process.argv[2], function (err, data) {
+    if (err) throw err;
+
+    var str = data.toString();
+
+    var n = str.split('\n').length;
+
+    console.log(n - 1);
+  });
+
+  <4 correto>
+
+  var fs = require('fs')
+    var file = process.argv[2]
+
+    fs.readFile(file, function (err, contents) {
+      if (err) {
+        return console.log(err)
+      }
+      // fs.readFile(file, 'utf8', callback) can also be used
+      var lines = contents.toString().split('\n').length - 1
+      console.log(lines)
+    })
+
+<5>
+fs = require('fs')
+
+var extensoes_permitidas = (process.argv[3]); 
+    
+var teste = "." + extensoes_permitidas;
+
+fs.readdir(process.argv[2],function(err, files ) {
+   if (err) {
+      return console.error(err);
+   }
+   files.forEach( function (file) {
+
+    var extensao = (file.substring(file.lastIndexOf("."))).toLowerCase(); 
+
+    if (teste.localeCompare(extensao) == 0){
+        console.log(file);  
+    }
+       
+   });
+  
+});
+
+<5 correto>
+
+var fs = require('fs')
+    var path = require('path')
+
+    var folder = process.argv[2]
+    var ext = '.' + process.argv[3]
+
+    fs.readdir(folder, function (err, files) {
+      if (err) return console.error(err)
+      files.forEach(function (file) {
+        if (path.extname(file) === ext) {
+          console.log(file)
+        }
+      })
+    })
+
+<6> chama a rotina
+const extensPermi = require('./rotina.js')
+const dir = process.argv[2]
+const extensao = process.argv[3]
+
+
+extensPermi(dir, extensao, function(err, lista){
+    if(err){
+        return console.error("Erro", err)
+    }
+
+        lista.forEach(function (file){
+
+            console.log(file)
+            
+        })
+
+
+})
+<6 correto> chama a rotina
+    var filterFn = require('./solution_filter.js')
+    var dir = process.argv[2]
+    var filterStr = process.argv[3]
+
+    filterFn(dir, filterStr, function (err, list) {
+      if (err) {
+        return console.error('There was an error:', err)
+      }
+
+      list.forEach(function (file) {
+        console.log(file)
+      })
+    })
